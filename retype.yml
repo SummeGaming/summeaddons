@@ -2,8 +2,8 @@ input: .
 output: .retype
 url: # Add your website address here
 branding:
-  title: Project Name121121
-  label: Docs1212121
+  logo: YyNa50C.png
+  logoDark: YyNa50C.png
 links:
   - text: Getting Started
     link: https://retype.com/guides/getting-started/
