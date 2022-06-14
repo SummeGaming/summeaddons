@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="2.3.0.708458849681">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="2.3.0.708542559435">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 2.3.0">
@@ -11,7 +11,7 @@
     <!-- Primary Meta Tags -->
     <title>Configuration</title>
     <meta name="title" content="Configuration">
-    <meta name="description" content="This is a basic page, with only a title and some text content." />
+    <meta name="description" content="That's the default config file." />
 
     <!-- Canonical -->
     <link rel="canonical" href="/comlink-system/config/" />
@@ -20,22 +20,22 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="/comlink-system/config/">
     <meta property="og:title" content="Configuration">
-    <meta property="og:description" content="This is a basic page, with only a title and some text content.">
+    <meta property="og:description" content="That's the default config file.">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="/comlink-system/config/">
     <meta property="twitter:title" content="Configuration">
-    <meta property="twitter:description" content="This is a basic page, with only a title and some text content.">
+    <meta property="twitter:description" content="That's the default config file.">
 
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="../../resources/css/retype.css?v=2.3.0.708458849681" rel="stylesheet" />
+    <link href="../../resources/css/retype.css?v=2.3.0.708542559435" rel="stylesheet" />
 
-    <script type="text/javascript" src="../../resources/js/config.js?v=2.3.0.708458849681" data-turbo-eval="false" defer></script>
+    <script type="text/javascript" src="../../resources/js/config.js?v=2.3.0.708542559435" data-turbo-eval="false" defer></script>
     <script type="text/javascript" src="../../resources/js/retype.js?v=2.3.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" type="text/javascript" src="../../resources/js/lunr.js?v=2.3.0.708458849681" data-turbo-eval="false" defer></script>
-    <script id="prism-js" type="text/javascript" src="../../resources/js/prism.js?v=2.3.0.708458849681" defer></script>
+    <script id="lunr-js" type="text/javascript" src="../../resources/js/lunr.js?v=2.3.0.708542559435" data-turbo-eval="false" defer></script>
+    <script id="prism-js" type="text/javascript" src="../../resources/js/prism.js?v=2.3.0.708542559435" defer></script>
 </head>
 <body>
     <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -176,222 +176,94 @@
         <span>Configuration</span>
     </h1>
 </doc-anchor-target>
-<p>This is a basic page, with only a title and some text content.</p>
+<p>That&#x27;s the default config file.</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<div class="codeblock-title">lua/squadsystem/sh_config.lua</div>
-<pre class="language-lua"><code v-pre class="language-lua">SquadSystem.Config = {}
+<div class="codeblock-title">lua/comlink/sh_config.lua</div>
+<pre class="language-lua"><code v-pre class="language-lua">if Comlink.Config then return end
+Comlink.Config = {}
 
-/* ----------------------------- Color settings ----------------------------- */
-
-SquadSystem.Config.Theme = {
-    primary = Color(0,228,171),
+Comlink.Config.Theme = {
+    primary = Color(221, 160, 31),
+    primaryTrans = Color(221, 160, 31, 100),
+    white = Color(255, 255, 255),
+    whiteTrans = Color(255, 255, 255, 93),
+    darkTrans = Color(44, 44, 44, 93),
+    blackTrans = Color(0, 0, 0, 230),
+    red = Color(255, 58, 58),
+    Indicators = {
+        [0] = Color(148, 255, 95),
+        [1] = Color(255, 196, 0),
+        [2] = Color(255, 47, 47),
+    }
 }
 
-/* ----- Default keybind, users can change it via &quot;summelibrary_hotkeys&quot; ---- */
-/* ------------------------- in their client console ------------------------ */
+-- Keybinds for muting and the menu
+-- Shift + Key: Mutes / Unmutes / Fullmutes yourself/sound
+-- Alt + Key: Quickswitch active/passive channels
+-- Key: Opens menu
+Comlink.Config.MenuKey = KEY_H
+-- Languages: en / de
+Comlink.Config.Language = &quot;en&quot;
+-- HUD height offset
+-- Default: 0
+-- Min: 0; Max: 1
+Comlink.Config.HeightOffset = 0
+-- HUD width offset
+-- Default: 0
+-- Min: -0.75; Max: 0
+Comlink.Config.WidthOffset = 0
+-- Voice Fix
+-- If you can't hear each other, or you can only hear each other with the comlink and not when you are standing next to each other
+Comlink.Config.ApplyVoiceFix = false
 
-SquadSystem.Config.Key = KEY_G
-
-/* ---------------------------- Language settings --------------------------- */
-/* -------------------- Currently available: en | de | ru ------------------- */
-
-SquadSystem.Config.Language = &quot;en&quot;
-
-/* ---------------- Whether the sideboard should show avatars --------------- */
-
-SquadSystem.Config.Sideboard = {
-    showAvatars = true,
+-- Entity Settings
+Comlink.Config.Entity = {
+    model = &quot;models/kingpommes/starwars/misc/palp_panel3.mdl&quot;,
+    hp = 1000,
 }
 
-/* ------------- Whether to block damage caused by squad members ------------ */
-/* ------------------------- Basically friendly fire ------------------------ */
+-- Comlink channels are registered here. 
+-- This function can also be executed anywhere else in the shared code, but should only be executed after the addon has been loaded!
+-- Example with job restriction
 
-SquadSystem.Config.BlockDamage = false
-
-/* ------------------ Experience Rewards (Leveling System) ------------------ */
-/* --------- (Vrondakis, Sublime, Bricks, Glorified &amp; VoidFactions) --------- */
-
-SquadSystem.Config.XPRewards = {
-    enabled = false, -- whether to give a player xp every x minutes for being part of a squad
-    frequency = 25, -- the interval in minutes
-    amount = 100, -- the amount of xp to give
-    notify = true, -- whether the player should be notified about it
-}
-
-/* ------------------------ Creator &amp; Squadlist NPCs ------------------------ */
-
-SquadSystem.Config.NPCModels = {
-    creator = &quot;models/mossman.mdl&quot;,
-    publicList = &quot;models/mossman.mdl&quot;,
-}
-
-/* -------------------- Customization of the squad ranks -------------------- */
-/* ------------ The first two ALWAYS have the squadlead privilege ----------- */
-
-SquadSystem.Config.Positions = {
-    [1] = {
-        name = &quot;SQ-Leader&quot;,
-        imgur = &quot;XVgS82g&quot;,
-    },
-    [2] = {
-        name = &quot;SQ-CoLeader&quot;,
-        imgur = &quot;BaG6mmo&quot;,
-    },
-    [3] = {
-        name = &quot;Medic&quot;,
-        imgur = &quot;K9NmqdQ&quot;,
-    },
-    [4] = {
-        name = &quot;Marksman&quot;,
-        imgur = &quot;YoUuuxs&quot;,
-    },
-    [5] = {
-        name = &quot;Heavygunner&quot;,
-        imgur = &quot;yDobdHS&quot;,
-    },
-    [6] = {
-        name = &quot;Rifleman&quot;,
-        imgur = &quot;LbFCAVG&quot;,
-    },
-}
-
-/* --------------- Customization of the communication options --------------- */
-
-SquadSystem.Config.Communications = {
-    [&quot;Need healing&quot;] = {
-        chatMsg = &quot;%PLAYER% needs medical treatment!&quot;,
-        overheadMsg = &quot;NEEDS HEALING&quot;,
-        imgur = &quot;Ew1RYeq&quot;,
-        color = Color(255,145,145),
-        time = 10,
-    },
-    [&quot;Watching here&quot;] = {
-        chatMsg = &quot;%PLAYER% is watching an area!&quot;,
-        overheadMsg = &quot;IS WATCHING HERE&quot;,
-        imgur = &quot;tPjRhA7&quot;,
-        color = Color(0,238,255),
-        time = 5,
-    },
-    [&quot;Need support&quot;] = {
-        chatMsg = &quot;%PLAYER% needs support!&quot;,
-        overheadMsg = &quot;NEEDS SUPPORT&quot;,
-        imgur = &quot;8h72EhA&quot;,
-        color = Color(255,0,255),
-        time = 5,
-    },
-    [&quot;On position&quot;] = {
-        chatMsg = &quot;%PLAYER% is on position!&quot;,
-        overheadMsg = &quot;IS ON POSITION&quot;,
-        imgur = &quot;4MDnmqR&quot;,
-        color = Color(0,212,28),
-        time = 5,
-    },
-    [&quot;Awating commands&quot;] = {
-        chatMsg = &quot;%PLAYER% is awaiting commands!&quot;,
-        overheadMsg = &quot;IS AWAITING COMMANDS&quot;,
-        imgur = &quot;nDzyJwx&quot;,
-        color = Color(255,0,0),
-        time = 5,
-    },
-    [&quot;Sector is clear&quot;] = {
-        chatMsg = &quot;%PLAYER% has cleared a sector!&quot;,
-        overheadMsg = &quot;SECTOR CLEARED&quot;,
-        imgur = &quot;MKQiStY&quot;,
-        color = Color(0,255,115),
-        time = 5,
-    },
-    [&quot;Ping (Normal)&quot;] = { -- If u change the name (Ping (Normal)) then change it also down there in the developer section!
-        chatMsg = &quot;%PLAYER% has marked a position!&quot;,
-        overheadMsg = &quot;POSITION MARKED&quot;,
-        imgur = &quot;7PwxRm0&quot;,
-        color = Color(255,166,0),
-        time = 5,
-        callbackSv = function(ply)
-            ply:SquadPing(&quot;normal&quot;)
-        end,
-    },
-    [&quot;Ping (Enemy)&quot;] = { -- If u change the name (Ping (Enemy)) then change it also down there in the developer section!
-        chatMsg = &quot;%PLAYER% has localized an enemy!&quot;,
-        overheadMsg = &quot;ENEMY FOUND&quot;,
-        imgur = &quot;tciaGfe&quot;,
-        color = Color(255,0,34),
-        time = 5,
-        callbackSv = function(ply)
-            ply:SquadPing(&quot;enemy&quot;)
-        end,
-    },
-}
-
-/* ----------------- Customization of the squadlead commands ---------------- */
-
-SquadSystem.Config.Commands = {
-    [&quot;Assemble!&quot;] = {
-        chatMsg = &quot;%PLAYER% commands: Assemble!&quot;,
-        color = Color(255,255,255),
-        imgur = &quot;LQMO027&quot;,
-    },
-    [&quot;All-around defense!&quot;] = {
-        chatMsg = &quot;%PLAYER% commands: All-around defense!&quot;,
-        color = Color(255,255,255),
-        imgur = &quot;LQMO027&quot;,
-    },
-    [&quot;Defend position!&quot;] = {
-        chatMsg = &quot;%PLAYER% commands: Defend position!&quot;,
-        color = Color(255,255,255),
-        imgur = &quot;LQMO027&quot;,
-    },
-    [&quot;All units! Attack!&quot;] = {
-        chatMsg = &quot;%PLAYER% commands: All units! Attack!&quot;,
-        color = Color(255,255,255),
-        imgur = &quot;LQMO027&quot;,
-    },
-    [&quot;Cease fire!&quot;] = {
-        chatMsg = &quot;%PLAYER% commands: Cease fire!&quot;,
-        color = Color(255,255,255),
-        imgur = &quot;LQMO027&quot;,
-    },
-    [&quot;Retreat!&quot;] = {
-        chatMsg = &quot;%PLAYER% commands: Retreat!&quot;,
-        color = Color(255,255,255),
-        imgur = &quot;LQMO027&quot;,
-    },
-    [&quot;Spread out!&quot;] = {
-        chatMsg = &quot;%PLAYER% commands: Spread out!&quot;,
-        color = Color(255,255,255),
-        imgur = &quot;LQMO027&quot;,
-    },
-    [&quot;Seek cover!&quot;] = {
-        chatMsg = &quot;%PLAYER% commands: Seek cover!&quot;,
-        color = Color(255,255,255),
-        imgur = &quot;LQMO027&quot;,
-    },
-}
-
-/* -------------------------------------------------------------------------- */
-/*                              Developer section                             */
-/*                Please only touch if u know what u are doing                */
-/* -------------------------------------------------------------------------- */
-
-
-hook.Add(&quot;SquadSystem.Loaded&quot;, &quot;SquadSystem.PingKeybinds&quot;, function()
-    if not CLIENT then return end
-    SummeLibrary:RegisterBind({
-        name = &quot;SquadSystem - Ping&quot;,
-        key = nil,
-        func = function()
-            if not LocalPlayer():GetSquad() then return end
-            SquadSystem:RequestCommunication(&quot;Ping (Normal)&quot;) -- If you have changed the name above, change it also here!
+hook.Add(&quot;Comlink.Loaded&quot;, &quot;Comlink.CreateChannels&quot;, function()
+    Comlink:CreateChannel({
+        name = &quot;5th&quot;,
+        color = Color(44, 105, 191),
+        accessCheck = function(ply)
+            return ply:IsInJob({&quot;5th Commander Gojira&quot;, &quot;5th Private&quot;, &quot;5th Lieutenant&quot;}) -- Job restricted channel using the job names
         end,
     })
-
-    SummeLibrary:RegisterBind({
-        name = &quot;SquadSystem - Ping (enemy)&quot;,
-        key = nil,
-        func = function()
-            if not LocalPlayer():GetSquad() then return end
-            SquadSystem:RequestCommunication(&quot;Ping (Enemy)&quot;) -- If you have changed the name above, change it also here!
+    
+    Comlink:CreateChannel({
+        name = &quot;Air Traffic&quot;,
+        color = Color(67, 111, 255),
+        accessCheck = function(ply) return true end -- This is a public channel end,
+    })
+    
+    Comlink:CreateChannel({
+        name = &quot;Medic Emergency&quot;,
+        color = Color(255, 67, 177),
+        accessCheck = function(ply) return true end -- This is a public channel end,
+    })
+    
+    Comlink:CreateChannel({
+        name = &quot;Announcement&quot;,
+        color = Color(255, 195, 67),
+        announcementChannel = true, -- This is an announcement channel. If you speak in this channel, you will be heard by the whole server!
+        accessCheck = function(ply)
+            return ply:IsInJob({&quot;Team on duty&quot;})
         end,
     })
+    
+    -- This creates just 15 blank channels for everyone
+    for i = 1, 15 do
+        Comlink:CreateChannel({
+            name = &quot;Frequence &quot; .. i,
+            color = Color(255, 255, 255),
+            accessCheck = function(ply) return true end,
+        })
+    end    
 end)</code></pre>
 </doc-codeblock></div>
 
@@ -403,20 +275,20 @@ end)</code></pre>
                             
                                 <nav class="flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../hud/config/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">Configuration</span>
+                                                <span class="block mt-1">Welcome</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../officerboost/config/">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../comlink-system/create_channels/">
                                             <span>
                                                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                                                <span class="block mt-1">Configuration</span>
+                                                <span class="block mt-1">Create channels</span>
                                             </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                         </a>
