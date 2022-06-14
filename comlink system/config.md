@@ -1,220 +1,92 @@
 # Configuration
 
-This is a basic page, with only a title and some text content.
+That's the default config file.
 
-```lua lua/squadsystem/sh_config.lua
-SquadSystem.Config = {}
+```lua lua/comlink/sh_config.lua
+if Comlink.Config then return end
+Comlink.Config = {}
 
-/* ----------------------------- Color settings ----------------------------- */
-
-SquadSystem.Config.Theme = {
-    primary = Color(0,228,171),
+Comlink.Config.Theme = {
+    primary = Color(221, 160, 31),
+    primaryTrans = Color(221, 160, 31, 100),
+    white = Color(255, 255, 255),
+    whiteTrans = Color(255, 255, 255, 93),
+    darkTrans = Color(44, 44, 44, 93),
+    blackTrans = Color(0, 0, 0, 230),
+    red = Color(255, 58, 58),
+    Indicators = {
+        [0] = Color(148, 255, 95),
+        [1] = Color(255, 196, 0),
+        [2] = Color(255, 47, 47),
+    }
 }
 
-/* ----- Default keybind, users can change it via "summelibrary_hotkeys" ---- */
-/* ------------------------- in their client console ------------------------ */
+-- Keybinds for muting and the menu
+-- Shift + Key: Mutes / Unmutes / Fullmutes yourself/sound
+-- Alt + Key: Quickswitch active/passive channels
+-- Key: Opens menu
+Comlink.Config.MenuKey = KEY_H
+-- Languages: en / de
+Comlink.Config.Language = "en"
+-- HUD height offset
+-- Default: 0
+-- Min: 0; Max: 1
+Comlink.Config.HeightOffset = 0
+-- HUD width offset
+-- Default: 0
+-- Min: -0.75; Max: 0
+Comlink.Config.WidthOffset = 0
+-- Voice Fix
+-- If you can't hear each other, or you can only hear each other with the comlink and not when you are standing next to each other
+Comlink.Config.ApplyVoiceFix = false
 
-SquadSystem.Config.Key = KEY_G
-
-/* ---------------------------- Language settings --------------------------- */
-/* -------------------- Currently available: en | de | ru ------------------- */
-
-SquadSystem.Config.Language = "en"
-
-/* ---------------- Whether the sideboard should show avatars --------------- */
-
-SquadSystem.Config.Sideboard = {
-    showAvatars = true,
+-- Entity Settings
+Comlink.Config.Entity = {
+    model = "models/kingpommes/starwars/misc/palp_panel3.mdl",
+    hp = 1000,
 }
 
-/* ------------- Whether to block damage caused by squad members ------------ */
-/* ------------------------- Basically friendly fire ------------------------ */
+-- Comlink channels are registered here. 
+-- This function can also be executed anywhere else in the shared code, but should only be executed after the addon has been loaded!
+-- Example with job restriction
 
-SquadSystem.Config.BlockDamage = false
-
-/* ------------------ Experience Rewards (Leveling System) ------------------ */
-/* --------- (Vrondakis, Sublime, Bricks, Glorified & VoidFactions) --------- */
-
-SquadSystem.Config.XPRewards = {
-    enabled = false, -- whether to give a player xp every x minutes for being part of a squad
-    frequency = 25, -- the interval in minutes
-    amount = 100, -- the amount of xp to give
-    notify = true, -- whether the player should be notified about it
-}
-
-/* ------------------------ Creator & Squadlist NPCs ------------------------ */
-
-SquadSystem.Config.NPCModels = {
-    creator = "models/mossman.mdl",
-    publicList = "models/mossman.mdl",
-}
-
-/* -------------------- Customization of the squad ranks -------------------- */
-/* ------------ The first two ALWAYS have the squadlead privilege ----------- */
-
-SquadSystem.Config.Positions = {
-    [1] = {
-        name = "SQ-Leader",
-        imgur = "XVgS82g",
-    },
-    [2] = {
-        name = "SQ-CoLeader",
-        imgur = "BaG6mmo",
-    },
-    [3] = {
-        name = "Medic",
-        imgur = "K9NmqdQ",
-    },
-    [4] = {
-        name = "Marksman",
-        imgur = "YoUuuxs",
-    },
-    [5] = {
-        name = "Heavygunner",
-        imgur = "yDobdHS",
-    },
-    [6] = {
-        name = "Rifleman",
-        imgur = "LbFCAVG",
-    },
-}
-
-/* --------------- Customization of the communication options --------------- */
-
-SquadSystem.Config.Communications = {
-    ["Need healing"] = {
-        chatMsg = "%PLAYER% needs medical treatment!",
-        overheadMsg = "NEEDS HEALING",
-        imgur = "Ew1RYeq",
-        color = Color(255,145,145),
-        time = 10,
-    },
-    ["Watching here"] = {
-        chatMsg = "%PLAYER% is watching an area!",
-        overheadMsg = "IS WATCHING HERE",
-        imgur = "tPjRhA7",
-        color = Color(0,238,255),
-        time = 5,
-    },
-    ["Need support"] = {
-        chatMsg = "%PLAYER% needs support!",
-        overheadMsg = "NEEDS SUPPORT",
-        imgur = "8h72EhA",
-        color = Color(255,0,255),
-        time = 5,
-    },
-    ["On position"] = {
-        chatMsg = "%PLAYER% is on position!",
-        overheadMsg = "IS ON POSITION",
-        imgur = "4MDnmqR",
-        color = Color(0,212,28),
-        time = 5,
-    },
-    ["Awating commands"] = {
-        chatMsg = "%PLAYER% is awaiting commands!",
-        overheadMsg = "IS AWAITING COMMANDS",
-        imgur = "nDzyJwx",
-        color = Color(255,0,0),
-        time = 5,
-    },
-    ["Sector is clear"] = {
-        chatMsg = "%PLAYER% has cleared a sector!",
-        overheadMsg = "SECTOR CLEARED",
-        imgur = "MKQiStY",
-        color = Color(0,255,115),
-        time = 5,
-    },
-    ["Ping (Normal)"] = { -- If u change the name (Ping (Normal)) then change it also down there in the developer section!
-        chatMsg = "%PLAYER% has marked a position!",
-        overheadMsg = "POSITION MARKED",
-        imgur = "7PwxRm0",
-        color = Color(255,166,0),
-        time = 5,
-        callbackSv = function(ply)
-            ply:SquadPing("normal")
-        end,
-    },
-    ["Ping (Enemy)"] = { -- If u change the name (Ping (Enemy)) then change it also down there in the developer section!
-        chatMsg = "%PLAYER% has localized an enemy!",
-        overheadMsg = "ENEMY FOUND",
-        imgur = "tciaGfe",
-        color = Color(255,0,34),
-        time = 5,
-        callbackSv = function(ply)
-            ply:SquadPing("enemy")
-        end,
-    },
-}
-
-/* ----------------- Customization of the squadlead commands ---------------- */
-
-SquadSystem.Config.Commands = {
-    ["Assemble!"] = {
-        chatMsg = "%PLAYER% commands: Assemble!",
-        color = Color(255,255,255),
-        imgur = "LQMO027",
-    },
-    ["All-around defense!"] = {
-        chatMsg = "%PLAYER% commands: All-around defense!",
-        color = Color(255,255,255),
-        imgur = "LQMO027",
-    },
-    ["Defend position!"] = {
-        chatMsg = "%PLAYER% commands: Defend position!",
-        color = Color(255,255,255),
-        imgur = "LQMO027",
-    },
-    ["All units! Attack!"] = {
-        chatMsg = "%PLAYER% commands: All units! Attack!",
-        color = Color(255,255,255),
-        imgur = "LQMO027",
-    },
-    ["Cease fire!"] = {
-        chatMsg = "%PLAYER% commands: Cease fire!",
-        color = Color(255,255,255),
-        imgur = "LQMO027",
-    },
-    ["Retreat!"] = {
-        chatMsg = "%PLAYER% commands: Retreat!",
-        color = Color(255,255,255),
-        imgur = "LQMO027",
-    },
-    ["Spread out!"] = {
-        chatMsg = "%PLAYER% commands: Spread out!",
-        color = Color(255,255,255),
-        imgur = "LQMO027",
-    },
-    ["Seek cover!"] = {
-        chatMsg = "%PLAYER% commands: Seek cover!",
-        color = Color(255,255,255),
-        imgur = "LQMO027",
-    },
-}
-
-/* -------------------------------------------------------------------------- */
-/*                              Developer section                             */
-/*                Please only touch if u know what u are doing                */
-/* -------------------------------------------------------------------------- */
-
-
-hook.Add("SquadSystem.Loaded", "SquadSystem.PingKeybinds", function()
-    if not CLIENT then return end
-    SummeLibrary:RegisterBind({
-        name = "SquadSystem - Ping",
-        key = nil,
-        func = function()
-            if not LocalPlayer():GetSquad() then return end
-            SquadSystem:RequestCommunication("Ping (Normal)") -- If you have changed the name above, change it also here!
+hook.Add("Comlink.Loaded", "Comlink.CreateChannels", function()
+    Comlink:CreateChannel({
+        name = "5th",
+        color = Color(44, 105, 191),
+        accessCheck = function(ply)
+            return ply:IsInJob({"5th Commander Gojira", "5th Private", "5th Lieutenant"}) -- Job restricted channel using the job names
         end,
     })
-
-    SummeLibrary:RegisterBind({
-        name = "SquadSystem - Ping (enemy)",
-        key = nil,
-        func = function()
-            if not LocalPlayer():GetSquad() then return end
-            SquadSystem:RequestCommunication("Ping (Enemy)") -- If you have changed the name above, change it also here!
+    
+    Comlink:CreateChannel({
+        name = "Air Traffic",
+        color = Color(67, 111, 255),
+        accessCheck = function(ply) return true end -- This is a public channel end,
+    })
+    
+    Comlink:CreateChannel({
+        name = "Medic Emergency",
+        color = Color(255, 67, 177),
+        accessCheck = function(ply) return true end -- This is a public channel end,
+    })
+    
+    Comlink:CreateChannel({
+        name = "Announcement",
+        color = Color(255, 195, 67),
+        announcementChannel = true, -- This is an announcement channel. If you speak in this channel, you will be heard by the whole server!
+        accessCheck = function(ply)
+            return ply:IsInJob({"Team on duty"})
         end,
     })
+    
+    -- This creates just 15 blank channels for everyone
+    for i = 1, 15 do
+        Comlink:CreateChannel({
+            name = "Frequence " .. i,
+            color = Color(255, 255, 255),
+            accessCheck = function(ply) return true end,
+        })
+    end    
 end)
 ```
